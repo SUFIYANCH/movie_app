@@ -63,6 +63,7 @@ class _HomePageState extends State<HomePage> {
                 return CustomScrollView(
                   slivers: [
                     SliverAppBar(
+                      automaticallyImplyLeading: false,
                       backgroundColor: Colors.black,
                       pinned: true,
                       title: Row(
@@ -73,9 +74,9 @@ class _HomePageState extends State<HomePage> {
                               showDialog(
                                 context: context,
                                 builder: (context) => SimpleDialog(
-                                  title: Text('Choose image from'),
+                                  title: const Text('Choose image from'),
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Row(
@@ -88,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                                           child: IconButton(
                                               onPressed: () =>
                                                   pickImgWithCamera(),
-                                              icon: Icon(
+                                              icon: const Icon(
                                                   Icons.camera_alt_outlined)),
                                         ),
                                         CircleAvatar(
@@ -97,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                                           child: IconButton(
                                               onPressed: () =>
                                                   pickImgWithGallery(),
-                                              icon: Icon(Icons.photo)),
+                                              icon: const Icon(Icons.photo)),
                                         ),
                                       ],
                                     ),
@@ -106,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                               );
                             },
                             child: file == null
-                                ? CircleAvatar(
+                                ? const CircleAvatar(
                                     backgroundImage:
                                         AssetImage('assets/donnieYen.jpg'),
                                   )
@@ -122,10 +123,11 @@ class _HomePageState extends State<HomePage> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => SearchPage(),
+                                          builder: (context) =>
+                                              const SearchPage(),
                                         ));
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.search,
                                     color: Colors.white,
                                   ))),
@@ -160,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                                 },
                                 options: CarouselOptions(
                                   autoPlayAnimationDuration:
-                                      Duration(seconds: 1),
+                                      const Duration(seconds: 1),
                                   autoPlay: true,
                                   height:
                                       MediaQuery.of(context).size.height * 0.6,
@@ -182,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 );
               } else {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
@@ -233,11 +235,11 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         const SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(
                 "Trending Now",
                 style: TextStyle(fontSize: 26, color: Colors.white),
@@ -259,11 +261,11 @@ class _HomePageState extends State<HomePage> {
                 return TrendingNow(results: result[index]);
               }),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(
                 "Series",
                 style: TextStyle(fontSize: 26, color: Colors.white),
@@ -291,17 +293,17 @@ class _HomePageState extends State<HomePage> {
                         );
                       });
                 } else {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
               }),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(
                 "Top rated",
                 style: TextStyle(fontSize: 26, color: Colors.white),
@@ -329,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     });
               } else {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }

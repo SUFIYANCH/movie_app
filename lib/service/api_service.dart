@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
+// import 'package:http/http.dart' as http;
 import 'package:movie_app/model/cast_model.dart';
 import 'package:movie_app/model/search_model.dart';
 import 'package:movie_app/model/series_movie_model.dart';
@@ -86,3 +87,23 @@ class Apiservice {
     return null;
   }
 }
+
+
+                   //http method
+
+
+// class Apiwithhttp {
+//   static http.Client client = http.Client();
+
+//   static getApi() async {
+//     Uri url = Uri.parse('https://api.themoviedb.org/3/movie/top_rated?api_key=af3ec5ac4cff3bf7a60c9069f46ed25e');
+//     try {
+//       http.Response response = await client.get(url);
+//       if (response.statusCode == 200) {
+//         return trendingmoviemodelFromJson(response.body);
+//       }
+//     } on Exception catch (e) {
+//       throw Exception(e);
+//     }
+//   }
+// }

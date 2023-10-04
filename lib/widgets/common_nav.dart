@@ -12,16 +12,16 @@ class _CommonNavState extends State<CommonNav> {
   int selectedTabIndex = 0;
 
   List<Widget> navPage = [
-    HomePage(),
-    Center(
+    const HomePage(),
+    const Center(
         child: Text(
       "Second Page",
     )),
-    Center(
+    const Center(
         child: Text(
       "Third Page",
     )),
-    Center(
+    const Center(
         child: Text(
       "Third Page",
     ))
@@ -36,14 +36,14 @@ class _CommonNavState extends State<CommonNav> {
           backgroundColor: Colors.black26,
           unselectedItemColor: Colors.grey[400],
           selectedItemColor: Colors.white,
-          selectedIconTheme: IconThemeData(color: Colors.white),
+          selectedIconTheme: const IconThemeData(color: Colors.white),
           currentIndex: selectedTabIndex,
           onTap: (value) {
             setState(() {
               selectedTabIndex = value;
             });
           },
-          items: [
+          items: const [
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.home,
