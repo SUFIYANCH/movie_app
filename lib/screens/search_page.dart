@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app/model/search_model.dart';
+import 'package:movie_app/providers/provider.dart';
 import 'package:movie_app/service/api_service.dart';
+import 'package:movie_app/utils/responsive.dart';
 
-class SearchPage extends StatefulWidget {
+class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  ConsumerState<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPageState extends ConsumerState<SearchPage> {
   Apiservice apiservice = Apiservice();
   TextEditingController searchController = TextEditingController();
   Future<SearchModel?>? searchData;
@@ -22,80 +25,98 @@ class _SearchPageState extends State<SearchPage> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFF161616),
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          toolbarHeight: 70,
-          backgroundColor: Colors.transparent,
-          title: TextField(
-            style: TextStyle(color: Colors.white),
-            controller: searchController,
-            cursorColor: Colors.white,
-            decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (searchController.text != '') {
-                        searchData =
-                            apiservice.getSearchMovie(searchController.text);
+          backgroundColor: const Color(0xFF161616),
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            elevation: 0,
+            toolbarHeight: 70,
+            backgroundColor: Colors.transparent,
+            title: TextField(
+              autofocus: true,
+              style: const TextStyle(color: Colors.white),
+              controller: searchController,
+              cursorColor: Colors.white,
+              decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      if (ref.watch(isSearchingProvider)) {
+                        searchController.clear();
+                        ref.read(isSearchingProvider.notifier).state = false;
+                        apiservice.getSearchMovie(searchController.text);
+                      } else {
+                        if (searchController.text != '') {
+                          searchData = apiservice
+                              .getSearchMovie(searchController.text)
+                              .then((value) {
+                            ref.read(isSearchingProvider.notifier).state = true;
+                            return null;
+                          });
+                        }
                       }
-                    });
-                  },
-                  icon: Icon(Icons.search_rounded),
-                ),
-                suffixIconColor: Colors.white,
-                hintText: 'Search movies or series or person..',
-                hintStyle: TextStyle(color: Colors.grey),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(width: 2, color: Colors.white)),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(width: 3, color: Colors.white))),
+                    },
+                    icon: Icon(ref.watch(isSearchingProvider)
+                        ? Icons.clear
+                        : Icons.search_rounded),
+                  ),
+                  suffixIconColor: Colors.white,
+                  hintText: 'Search movies or series or person..',
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide:
+                          const BorderSide(width: 2, color: Colors.white)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide:
+                          const BorderSide(width: 3, color: Colors.white))),
+            ),
           ),
-        ),
-        body: FutureBuilder(
-          future: searchData,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<Result> data = snapshot.data!.results!;
-              return data.isEmpty
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          body: ref.watch(searchProvider(searchController.text)).when(
+                data: (data) {
+                  if (data!.results!.isEmpty) {
+                    return Center(
+                      child: Text(
+                        "Search Movies...",
+                        style: TextStyle(
+                            color: Colors.white, fontSize: R.rw(24, context)),
+                      ),
+                    );
+                  } else {
+                    return GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                       ),
-                      itemCount: data.length,
+                      itemCount: data.results!.length,
                       itemBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
+                        child: SizedBox(
                           height: 200,
                           width: 160,
                           child: Image.network(
-                            data[index].posterPath == null
-                                ? data[index].profilePath == null
+                            data.results![index].posterPath == null
+                                ? data.results![index].profilePath == null
                                     ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png?20200912122019'
-                                    : imgOriginal + data[index].profilePath!
-                                : imgOriginal + data[index].posterPath!,
+                                    : imgOriginal +
+                                        data.results![index].profilePath!
+                                : imgOriginal +
+                                    data.results![index].posterPath!,
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
                     );
-            } else {
-              return const Center(
-                child: Text(
-                  'Search Movies',
-                  style: TextStyle(fontSize: 26, color: Colors.white),
+                  }
+                },
+                error: (error, stackTrace) {
+                  return const Center(
+                    child: Text("Something Went Wrong"),
+                  );
+                },
+                loading: () => const Center(
+                  child: CircularProgressIndicator(),
                 ),
-              );
-            }
-          },
-        ),
-      ),
+              )),
     );
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/screens/details_page.dart';
 
-import '../model/series_movie_model.dart';
-import '../screens/series_detail_page.dart';
+import '../model/trending_movie_model.dart';
 
-class Seriesmovies extends StatelessWidget {
-  final Result seriesimg;
-  const Seriesmovies({super.key, required this.seriesimg});
+class TopratedMovies extends StatelessWidget {
+  final Result topratedimg;
+  const TopratedMovies({super.key, required this.topratedimg});
   final String imgOriginal = "http://image.tmdb.org/t/p/original";
   final String imgMedium = "http://image.tmdb.org/t/p/w300";
 
@@ -13,7 +13,9 @@ class Seriesmovies extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => SeriesDetailsPage(seriesimg),
+        builder: (context) => DetailsPage(
+          result: topratedimg,
+        ),
       )),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -23,7 +25,7 @@ class Seriesmovies extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Image.network(
-          imgOriginal + seriesimg.posterPath,
+          imgOriginal + topratedimg.posterPath.toString(),
           fit: BoxFit.cover,
         ),
       ),

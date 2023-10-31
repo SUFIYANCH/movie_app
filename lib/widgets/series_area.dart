@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/screens/details_page.dart';
+import 'package:movie_app/screens/series_detail_page.dart';
+import '../model/series_movie_model.dart';
 
-import '../model/trending_movie_model.dart';
-
-class TrendingNow extends StatelessWidget {
-  final Result results;
-  const TrendingNow({super.key, required this.results});
+class Seriesmovies extends StatelessWidget {
+  final Result seriesimg;
+  const Seriesmovies({super.key, required this.seriesimg});
   final String imgOriginal = "http://image.tmdb.org/t/p/original";
   final String imgMedium = "http://image.tmdb.org/t/p/w300";
 
@@ -13,7 +12,7 @@ class TrendingNow extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => DetailsPage(results),
+        builder: (context) => SeriesDetailsPage(results: seriesimg),
       )),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -23,7 +22,7 @@ class TrendingNow extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Image.network(
-          imgOriginal + results.posterPath,
+          imgOriginal + seriesimg.posterPath.toString(),
           fit: BoxFit.cover,
         ),
       ),

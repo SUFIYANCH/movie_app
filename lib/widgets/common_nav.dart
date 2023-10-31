@@ -1,47 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_app/providers/provider.dart';
 import 'package:movie_app/screens/home_page.dart';
+import 'package:movie_app/screens/language_screen.dart';
+import 'package:movie_app/screens/profile_page.dart';
+import 'package:movie_app/screens/search_page.dart';
 
-class CommonNav extends StatefulWidget {
+class CommonNav extends ConsumerStatefulWidget {
   const CommonNav({super.key});
 
   @override
-  State<CommonNav> createState() => _CommonNavState();
+  ConsumerState<CommonNav> createState() => _CommonNavState();
 }
 
-class _CommonNavState extends State<CommonNav> {
-  int selectedTabIndex = 0;
-
+class _CommonNavState extends ConsumerState<CommonNav> {
   List<Widget> navPage = [
     const HomePage(),
-    const Center(
-        child: Text(
-      "Second Page",
-    )),
-    const Center(
-        child: Text(
-      "Third Page",
-    )),
-    const Center(
-        child: Text(
-      "Third Page",
-    ))
+    const SearchPage(),
+    const LanguageScreen(),
+    const ProfilePage()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: navPage[selectedTabIndex],
+      body: navPage[ref.watch(navigationIndexProvider)],
       extendBody: true,
       bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.black26,
           unselectedItemColor: Colors.grey[400],
           selectedItemColor: Colors.white,
           selectedIconTheme: const IconThemeData(color: Colors.white),
-          currentIndex: selectedTabIndex,
+          currentIndex: ref.watch(navigationIndexProvider),
           onTap: (value) {
-            setState(() {
-              selectedTabIndex = value;
-            });
+            ref.read(navigationIndexProvider.notifier).state = value;
           },
           items: const [
             BottomNavigationBarItem(
@@ -53,23 +45,23 @@ class _CommonNavState extends State<CommonNav> {
                 backgroundColor: Colors.black26),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.api_rounded,
+                Icons.search,
                 size: 28,
               ),
-              label: 'Api',
+              label: 'Search',
             ),
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.downloading_rounded,
+                  Icons.language,
                   size: 28,
                 ),
-                label: 'Download'),
+                label: 'Language'),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.movie,
+                Icons.person,
                 size: 28,
               ),
-              label: 'Movie',
+              label: 'Profile',
             ),
           ]),
     );

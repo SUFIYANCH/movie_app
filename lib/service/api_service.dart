@@ -22,7 +22,7 @@ class Apiservice {
         return trendingmoviemodelFromJson(jsonResponse);
       }
     } on DioError catch (e) {
-      print("$e");
+      log("$e");
     }
     return null;
   }
@@ -36,7 +36,7 @@ class Apiservice {
         return seriesmoviemodelFromJson(jsonResponse);
       }
     } on DioError catch (e) {
-      print("$e");
+      log("$e");
     }
     return null;
   }
@@ -50,7 +50,7 @@ class Apiservice {
         return trendingmoviemodelFromJson(jsonResponse);
       }
     } on DioError catch (e) {
-      print("$e");
+      log("$e");
     }
     return null;
   }
@@ -66,7 +66,23 @@ class Apiservice {
         return castModelFromJson(jsonResponse);
       }
     } on DioError catch (e) {
-      print("$e");
+      log("$e");
+    }
+    return null;
+  }
+
+  Future<CastModel?> getSeriesCast(int id) async {
+    try {
+      Response response = await dio.get("/tv/$id/credits");
+      log(response.statusCode.toString());
+      if (response.statusCode == 200) {
+        log(response.data.toString());
+
+        var jsonResponse = json.encode(response.data);
+        return castModelFromJson(jsonResponse);
+      }
+    } on DioError catch (e) {
+      log("$e");
     }
     return null;
   }
@@ -82,11 +98,31 @@ class Apiservice {
         return searchModelFromJson(jsonResponse);
       }
     } on DioError catch (e) {
-      print("$e");
+      log("$e");
+    }
+    return null;
+  }
+
+  Future<Trendingmoviemodel?> getLanguageMovie(String language) async {
+    try {
+      Response response =
+          await dio.get("/discover/movie?with_original_language=$language&");
+      log(response.statusCode.toString());
+      if (response.statusCode == 200) {
+        log(response.data.toString());
+
+        var jsonResponse = json.encode(response.data);
+        return trendingmoviemodelFromJson(jsonResponse);
+      }
+    } on DioError catch (e) {
+      log("$e");
     }
     return null;
   }
 }
+
+
+
 
 
                    //http method
